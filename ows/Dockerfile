@@ -1,4 +1,4 @@
-FROM africahazardswatch.org/gsky-base:latest
+FROM erickotenyo/gsky-base:latest
 LABEL maintainer="Erick Otenyo <otenyo.erick@gmail.com>"
 
 RUN apt-get update \
