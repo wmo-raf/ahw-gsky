@@ -19,6 +19,7 @@ RUN ./build_gsky.sh $gsky_repo $gsky_branch
 
 COPY ./scripts/ingest.sh /
 COPY ./scripts/ingest_data.sh /
+COPY ./scripts/custom_ingest_script.sh /
 COPY ./scripts/reset_mas.sh /
 COPY ./scripts/shard_delete.sh /
 

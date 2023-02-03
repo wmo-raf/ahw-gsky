@@ -68,3 +68,27 @@
             source: payload
             name: shard
   trigger-rule-mismatch-http-response-code: 400
+- id: custom-ingest-script
+  execute-command: /custom_ingest_script.sh
+  http-methods:
+    - POST
+  include-command-output-in-response: true
+  pass-arguments-to-command:
+    - source: payload
+      name: filename
+  trigger-rule:
+    and:
+      - match:
+          type: payload-hmac-sha256
+          secret: [WEBHOOK_SECRET]
+          parameter:
+            source: header
+            name: X-Gsky-Signature
+      - match:
+          type: regex
+          regex: ^-f .+
+          parameter:
+            source: payload
+            name: filename
+  trigger-rule-mismatch-http-response-code: 400
+
