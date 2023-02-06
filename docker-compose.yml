@@ -60,7 +60,7 @@ services:
     volumes:
       - ${GSKY_DATA_VOLUME}:/gskydata
       - ./mas_api/scripts/ingest.sh:/ingest.sh
-      - .${GSKY_INGEST_SCRIPTS_VOLUME}:/ingest_scripts
+      - ${GSKY_INGEST_SCRIPTS_VOLUME}:/ingest_scripts
       - ./ows/rulesets:/rulesets
     environment:
       - WAIT_HOSTS=gsky_mas_db:5432
