@@ -13,6 +13,7 @@ filename=""
 
 INGEST_SCRIPTS_ROOT_DIR="/ingest_scripts"
 
+# process arguments
 while getopts f: opt; do
     case $opt in
     f) filename=$OPTARG ;;
@@ -23,18 +24,26 @@ while getopts f: opt; do
     esac
 done
 
+# remove processed options
 shift "$((OPTIND - 1))"
 
+# check if the filename paramater is empty
 if [ -z "$filename" ]; then
     echo 'Missing -f (name of the script file to execute)' >&2
     exit 1
 fi
 
+# strip any leading whitespaces
+filename="${filename#"${filename%%[![:space:]]*}"}"
+
+# full path to script
 ingest_script_file="$INGEST_SCRIPTS_ROOT_DIR/$filename.sh"
 
+# check if the script file exists
 if [ ! -e "$ingest_script_file" ]; then
-    echo "The specified '$filename.sh' does not exist" >&2
+    echo "The specified '$ingest_script_file' does not exist" >&2
     exit 1
 fi
 
+# execute the script file
 exec "$ingest_script_file"
