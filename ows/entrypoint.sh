@@ -15,16 +15,26 @@ WORKER_NODES=', ' read -r -a array <<<$WORKER_NODES
 
 MEMCACHE_URI=${MEMCACHE_URI:=-""}
 
+GEOJSON_GET_ENDPOINT=${GEOJSON_GET_ENDPOINT:-""}
+
 # update config.json files
 config_dir="/gsky/etc"
 config_files=$(find $config_dir -type f -name '*.json')
 
-for file in $config_files
-do
+for file in $config_files; do
+  # update service_config
   tmp=$(mktemp)
   jq '.service_config |= . + {"ows_hostname":"'${OWS_HOSTNAME}'","ows_protocol":"'${OWS_PROTOCOL}'","mas_address":"'${MAS_ADDRESS}'", "worker_nodes":['${WORKER_NODES}']}' \
-  $file >"$tmp" && mv "$tmp" $file
-done;
+    $file >"$tmp" && mv "$tmp" $file
+
+  # update wms_geojson_clip_config
+  if [ -n "$GEOJSON_GET_ENDPOINT" ]; then
+    tmp=$(mktemp)
+    jq '.wms_geojson_clip_config |= . + {"geojson_get_endpoint":"'${GEOJSON_GET_ENDPOINT}'"}' \
+      $file >"$tmp" && mv "$tmp" $file
+  fi
+
+done
 
 ows_port=8080
 
