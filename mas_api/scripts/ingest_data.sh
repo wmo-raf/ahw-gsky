@@ -21,15 +21,21 @@ if [ -z "$res" ]; then
   echo "No ${CRAWL_PATTERN} files under '$CRAWL_DIR'."
 else
   set -x
-
-  rm -rf $CRAWL_OUTPUT_DIR
+  
   mkdir -p $CRAWL_OUTPUT_DIR
 
   /gsky/bin/gsky-crawl_pipeline.sh
 
   crawl_job_id="${CRAWL_DIR//[\/]/_}"
 
-  (cd /gsky/share/mas && ./ingest_pipeline.sh $SHARD_NAME /crawl_outputs/${crawl_job_id}_gdal.tsv.gz)
+  crawl_result_file=${CRAWL_OUTPUT_DIR}/${crawl_job_id}_gdal.tsv.gz
+  crawl_file_list=${CRAWL_OUTPUT_DIR}/${crawl_job_id}.filelist.gz
+
+  (cd /gsky/share/mas && ./ingest_pipeline.sh $SHARD_NAME $crawl_result_file)
+
+  # clean up
+  rm $crawl_result_file
+  rm $crawl_file_list
 
   # flush memcache on each ingestion
   if [ ! -z "$MEMCACHE_DEV_TCP_FILE" ]; then
