@@ -34,6 +34,7 @@ services:
       - WEBHOOK_ENABLED=true
       - MEMCACHE_URI=gsky_memcached:11211
       - GEOJSON_GET_ENDPOINT=${GEOJSON_GET_ENDPOINT}
+      - GSKY_URL_BASE=${GSKY_URL_BASE}
     ports:
       - 8080
       - 9000

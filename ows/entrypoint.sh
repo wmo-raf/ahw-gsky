@@ -14,6 +14,7 @@ WORKER_NODES=${WORKER_NODES:-'127.0.0.1:6000'}
 WORKER_NODES=', ' read -r -a array <<<$WORKER_NODES
 
 MEMCACHE_URI=${MEMCACHE_URI:=-""}
+GSKY_URL_BASE=${GSKY_URL_BASE:=-""}
 
 GEOJSON_GET_ENDPOINT=${GEOJSON_GET_ENDPOINT:-""}
 
@@ -38,7 +39,7 @@ done
 
 ows_port=8080
 
-./gsky/bin/gsky-ows -p $ows_port -memcache $MEMCACHE_URI -v &
+./gsky/bin/gsky-ows -p $ows_port -memcache $MEMCACHE_URI -url_base $GSKY_URL_BASE -v &
 
 sleep 0.5
 
